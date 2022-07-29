@@ -1,1 +1,44 @@
-this is a new story which is so horror
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.Services;
+
+namespace WebApplication7
+{
+    public partial class Items : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        public class ItemClass
+        {
+            public string ItemName { get; set; }
+
+            public int CostPrice { get; set; }
+
+            public int SalePrice { get; set; }
+
+            public ItemClass(string itemName, int costPrice, int salePrice)
+            {
+                this.ItemName = itemName;
+                this.CostPrice = costPrice;
+                this.SalePrice = salePrice;
+            }
+        }
+        
+        [WebMethod]
+        public static List<ItemClass> Add(string ItemName, int CostPrice,int SalePrice)
+        {
+            List<ItemClass> item = new List<ItemClass>();
+
+            item.Add(new ItemClass(ItemName, CostPrice, SalePrice));
+
+            return item;
+        }
+    }
+}
