@@ -1,1 +1,109 @@
-have you read the story of harry potter
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Items.aspx.cs" Inherits="WebApplication7.Items" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Items Manipulation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <style>
+        .btn{
+            margin-top:10px;
+        }
+    </style>
+    <script>
+        function addItems() {
+             $.ajax({
+                url: "Items.aspx/Add",
+                type: "POST",
+                 data: "{ItemName:'" + $('#ItemName').val() + "',CostPrice:'" + $('#CostPrice').val() + "',SalePrice:'" + $('#SalePrice').val() +"'}",
+                 dataType: "json",
+                 contentType: "application/json; charset=utf-8",
+                 success: OnSuccess,
+                 failure: function (response) {
+                     alert(response.d);
+                 },
+                 error: function (response) {
+                     alert(response.d);
+                 }
+            });
+        };
+
+        function OnSuccess(response) {
+            $('#itemTableData').DataTable(
+                {
+                    bLengthChange: true,
+                    lengthMenu: [[5, 10, -1], [5, 25, 50]],
+                    bFilter: true,
+                    bSort: true,
+                    bPaginate: true,
+                    data: data.d,
+                    columns: [{ 'data': 'ItemName' },
+                    { 'data': 'CostItem' },
+                    { 'data': 'SaleItem' },
+                        {
+                            "data": "Id", "render": function (data) {
+                                return '<a class="btn btn-primary" style="margin-left:30px"  onclick="editdetails(' + data + ')">Edit</a>   <a class="btn btn-danger" style="margin-left:5px; margin-right:-15x" onclick="deletedetails(' + data + ')">Delete</a>'
+
+                            }
+                    }]
+                });
+        }; 
+    </script> 
+    
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card-title">
+                    <h1>Add Items</h1>
+                </div>
+                <div >
+                    <form runat="server" id="ItemTable">
+                        <div >
+                            <asp:Label runat="server" ID="Label1" for="ItemName" Text="Item Name" class="col-form-label"></asp:Label>
+                            <asp:TextBox ID="ItemName" runat="server" class="form-control"></asp:TextBox>
+                        </div>
+                        <div>
+                            <asp:Label runat="server" ID="Label2" for="CostPrice" Text="Cost Price" class="col-form-label"></asp:Label>
+                            <asp:TextBox ID="CostPrice" runat="server" class="form-control" TextMode="Number"></asp:TextBox>
+                        </div>
+                        <div>
+                            <asp:Label runat="server" ID="Label3" for="SalePrice" Text="Sale Price" class="col-form-label"></asp:Label>
+                            <asp:TextBox ID="SalePrice" runat="server" class="form-control" TextMode="Number"></asp:TextBox>
+                        </div>
+                        <div>
+                            <asp:Button runat="server" ID="Save" class="btn btn-primary" OnClientClick="addItems();" Text="Add Items"/>
+                         </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="container">
+        <div>
+            <h1>Items Details</h1>
+        </div>
+        <div>
+            <table id="itemTableData" class="table table-active" width="100%">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Cost Price</th>
+                        <th>Sale Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
