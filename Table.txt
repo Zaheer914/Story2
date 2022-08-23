@@ -1,0 +1,79 @@
+CREATE TABLE Country (
+  id int ,
+  CountryName varchar(100) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+create TABLE Holidays (
+  id int ,
+  CountryId int Not Null,
+  CountryName varchar(50) NOT NULL,
+  specialholiday varchar(50),
+  
+  PRIMARY KEY (id),
+  FOREIGN KEY (CountryId)
+      REFERENCES Country(id)
+      ON DELETE CASCADE
+);
+
+create Table SpecialHolidays(
+id int,
+SpecailId int Not Null,
+SpecialDate date Not Null,
+PRIMARY KEY (id),
+  FOREIGN KEY (SpecailId)
+      REFERENCES Country(id)
+      ON DELETE CASCADE
+)
+
+insert into country values(1,'Pakistan')
+insert into Holidays values(1,1,'Pakistan','Saturday')
+insert into Holidays values(2,1,'Pakistan','Sunday')
+insert into country values(2,'Uae') 
+insert into Holidays values(3,2,'Uae','Friday')
+insert into Holidays values(4,2,'Uae','Saturday')
+
+
+insert into SpecialHolidays values (1,1,'2022-02-05')
+insert into SpecialHolidays values (2,1,'2022-03-23')
+insert into SpecialHolidays values (3,1,'2022-05-01')
+insert into SpecialHolidays values (4,1,'2022-05-02')
+insert into SpecialHolidays values (5,1,'2022-05-03')
+insert into SpecialHolidays values (6,1,'2022-05-04')
+insert into SpecialHolidays values (7,1,'2022-05-05')
+insert into SpecialHolidays values (8,1,'2022-07-08')
+insert into SpecialHolidays values (9,1,'2022-07-09')
+insert into SpecialHolidays values (10,1,'2022-07-10')
+insert into SpecialHolidays values (11,1,'2022-07-11')
+insert into SpecialHolidays values (12,1,'2022-07-12')
+insert into SpecialHolidays values (13,1,'2022-08-08')
+insert into SpecialHolidays values (14,1,'2022-08-09')
+insert into SpecialHolidays values (15,1,'2022-08-14')
+insert into SpecialHolidays values (16,1,'2022-10-09')
+insert into SpecialHolidays values (17,1,'2022-12-25')
+
+insert into SpecialHolidays values (18,2,'2022-02-05')
+insert into SpecialHolidays values (19,2,'2022-03-23')
+insert into SpecialHolidays values (20,2,'2022-05-01')
+insert into SpecialHolidays values (21,2,'2022-05-02')
+insert into SpecialHolidays values (22,2,'2022-05-03')
+insert into SpecialHolidays values (23,2,'2022-05-04')
+insert into SpecialHolidays values (24,2,'2022-05-05')
+insert into SpecialHolidays values (25,2,'2022-07-08')
+insert into SpecialHolidays values (26,2,'2022-07-09')
+insert into SpecialHolidays values (27,2,'2022-07-10')
+insert into SpecialHolidays values (28,2,'2022-07-11')
+insert into SpecialHolidays values (29,2,'2022-07-12')
+insert into SpecialHolidays values (30,2,'2022-08-08')
+
+select * from Country
+select * from Holidays
+select * from SpecialHolidays
+
+--Update Holidays set CountryName = 'Usa' where id = 4 
+--drop table Holidays
+--drop table Country
+--drop table SpecialHolidays
+
+
+select * from Country Join SpecialHolidays ON SpecialHolidays.SpecailId = Country.Id join Holidays on Holidays.CountryId = Country.Id 
