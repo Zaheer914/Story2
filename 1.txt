@@ -1,0 +1,126 @@
+using System;
+
+public class Sudoku
+{
+
+    public int N;
+
+    public int[,] sudokuGrid;
+
+    public int boxSize;
+
+    public Sudoku()
+    {
+        this.N = 9;
+
+        this.sudokuGrid = new int[N, N];
+
+        this.boxSize = (int)(Math.Sqrt(N));
+    }
+
+    public void FillAllValues()
+    {
+        FillDiagonalBoxesValues();
+
+
+    }
+    public void FillDiagonalBoxesValues()
+    {
+        FillCell();
+    }
+
+
+  
+    public void FillCell()
+    {
+        int num;
+        for (int rowIndex = 0; rowIndex < N; rowIndex++)
+        {
+            for (int colIndex = 0; colIndex < N; colIndex++)
+            {
+                do
+                {
+                    num = RandomGenerator(N);
+                   
+                }
+                while (IsBoxContains(rowIndex,colIndex,num));
+
+
+
+                sudokuGrid[rowIndex, colIndex] = num;
+                
+            }
+        }
+    }
+
+    public static  int RandomGenerator(int num)
+    {
+        Random rand = new Random();
+        return (int)Math.Floor((double)(rand.NextDouble() * num + 1));
+
+    }
+
+    public bool IsBoxContains(int rowIndex, int colIndex, int num)
+    {
+        int currentRowIndex = rowIndex - rowIndex % 3;
+        int currentcolIndex = colIndex - colIndex % 3;
+        for (int i = currentRowIndex; i < currentRowIndex+boxSize; i++)
+        {
+            for (int j = currentcolIndex; j < currentcolIndex + boxSize; j++)
+            {
+                if (sudokuGrid[i, j] == num)
+                {
+                    return true;
+                }
+               
+            }
+
+        }
+        return false;
+    }
+
+    public bool IsRowContains(int rowIndex, int num)
+    {
+        for (int colIndex = 0; colIndex < N; colIndex++)
+        {
+            if (sudokuGrid[rowIndex, colIndex] == num)
+            {
+                return true;
+            }
+        }      
+        return false;
+    }
+
+    public bool IsColumnContains(int colIndex, int num)
+    {
+        for (int rowIndex = 0; rowIndex < N; rowIndex++)
+        {
+            if (sudokuGrid[rowIndex, colIndex] == num)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void PrintSudoku()
+    {
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
+                Console.Write(sudokuGrid[i, j] + " ");
+            Console.WriteLine();
+        }
+        Console.WriteLine();
+    }
+
+    public static void Main(string[] args)
+    {
+
+        Sudoku sudoku = new Sudoku();
+        sudoku.FillAllValues();
+        sudoku.PrintSudoku();
+    }
+
+}
+

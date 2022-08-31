@@ -1,0 +1,101 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Calculator.aspx.cs" Inherits="WebApplication1.Calculator" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head runat="server">
+        <title>Calculator</title>
+        <style>
+            *{
+                font-size:30px;
+            }
+            .main{
+                background-color:aliceblue;
+            }
+            .title{
+                padding:5px 150px;
+            }
+            .number1{
+               padding:10px 100px;
+            }
+            .number2{
+                padding:10px 100px;
+            }
+            .operation{
+                padding:10px 15px 10px 150px;
+            }
+            .result-button{
+                 padding:10px 15px 10px 150px;
+            }
+            .result{
+                 padding:10px 15px 10px 150px;
+            }
+            
+        </style>
+        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script type="text/javascript">
+                // Checking every event key and Enter only Number and point
+                function isNumberKey(e) {
+                    var count = 0;
+                    var x = e.which || e.keycode;
+                    if ((x >= 48 && x <= 57) || x==46 ) {
+                        return true;  
+                        }
+
+                        alert('Please Enter a Number');
+                        return false;
+                }
+                // Checking Number Validity 
+                function validNumber() {
+                  // Accessing Both input to check validity 
+                   var num1 = document.getElementById('Number1').value;
+                   var num2 = document.getElementById('Number2').value;
+                   //Calling isNan() to check Valid Number
+                   if (isNaN(num1)) {
+                      alert('X is not valid a number');
+                      return false;
+                   }
+                   if (isNaN(num2)) {
+                       alert('Y is not valid a number');
+                      return false;
+                    }
+                        return true;
+                }
+
+        </script>
+    </head>  
+    <body>  
+        <form id="form1" runat="server">
+            <div class="main">
+                <div class="title">
+                    <h1>Calculator</h1>
+                </div>
+                <div class="number1">
+                    <asp:Label ID="labeNumber1" runat="server" Text="X = "></asp:Label>
+                    <asp:TextBox ID="Number1" runat="server" ToolTip="Enter Number1" placeholder="Only Numbers are allowed" onkeypress="return isNumberKey(event)"></asp:TextBox>
+                </div>
+                <div class="number2">
+                    <asp:Label ID="labelNumber2" runat="server" Text="Y = "></asp:Label>
+                    <asp:TextBox ID="Number2" runat="server" ToolTip="Enter Number2" placeholder="Only Numbers are allowed" onkeypress="return isNumberKey(event)"></asp:TextBox>
+                </div>
+                <div class="operation">
+                    <asp:DropDownList ID="Operations" runat="server" AppendDataBoundItems="true">
+                        <asp:ListItem Value="+" Text="Add" />
+                        <asp:ListItem Value="-" Text="Subtract" />
+                        <asp:ListItem Value="*" Text="Multiply" />
+                        <asp:ListItem Value="/" Text="Division" />
+                    </asp:DropDownList>
+                </div>
+                <div class="result-button">
+                    <asp:Button ID="CalculateButton" runat="server" Text="Calculate" OnClick="Button1_Click" OnClientClick="return validNumber()" />
+                </div>
+
+                <div class="result">
+                    <asp:Label ID="labelResult" runat="server" Text="<b>Result:</b>"></asp:Label>
+                    <asp:Label ID="resultCalculate" runat="server" Text="Label"></asp:Label>
+                </div>
+            </div>
+              
+        </form>   
+    </body>  
+</html>
