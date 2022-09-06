@@ -1,0 +1,92 @@
+--Creating database if it does not exist
+if Not Exists(Select * from sys.databases where name = 'Movie_Mangement')
+Begin
+	Create DataBase [Movie_Mangement]
+	
+End
+
+Go
+
+Use [Movie_Mangement]
+
+Go
+
+--Create Table of Geners If Not Exist 
+If Not Exists (Select * from sys.objects where name ='Geners')
+Begin
+	Create Table Geners(
+	Id int Identity(1,1) Not Null,
+	Name varchar(50) Not Null,
+	Primary Key(Id)
+	)
+
+End
+
+Go
+--Create Table of Movies If Not Exist 
+If Not Exists (Select * from sys.objects where name ='Movies')
+Begin
+	Create Table Movies(
+	Id int Identity(1,1) Not Null,
+	Name varchar(50) Not Null,
+	Price Int Not Null,
+	Primary Key(Id)
+	)
+End
+
+if Not Exists (Select * from sys.objects where name = 'Geners_in_Movies')
+Begin
+	Create Table Geners_in_Movies(
+	geners_Id Int Not Null,
+	movie_Id int Not Null,
+	Foreign key (geners_Id) References Geners(Id),
+	Foreign Key (movie_Id) References Movies(Id)
+	)
+End
+
+Go
+--Create a User Information Table To Login
+if Not Exists (Select * from sys.objects where name = 'users')
+Begin
+	Create Table users(
+	Id int Identity(1,1) Not Null,
+	UserName varchar(50) Not Null,
+	UserPassword varchar(50) Not Null,
+	Primary Key (Id)
+	)
+End
+
+Go
+--Create a cart to store User Information Wants to purchase
+if Not Exists (Select * from sys.objects where name = 'Cart')
+Begin
+	Create Table Cart(
+	Customer_id int Not Null,
+	movie_Name varchar(50) Not Null,
+	movie_Price Int Not Null,
+	Foreign key (Customer_id) References users(Id),	
+	)
+End
+
+--Create a cart to store User Information Wants to purchase
+if Not Exists (Select * from sys.objects where name = 'Purchase')
+Begin
+	Create Table Purchase(
+	Customer_id int Not Null,
+	movie_Name varchar(50) Not Null,
+	movie_Price Int Not Null,
+	Foreign key (Customer_id) References users(Id),	
+	)
+End
+
+Go
+--Create a cart to store User Information Wants to purchase
+if Not Exists (Select * from sys.objects where name = 'Search_Engine')
+Begin
+	Create Table Search_Engine(
+	Id Int Identity(1,1) Not Null,
+	Search varchar(50) Not Null,
+	Primary Key(Id),
+	Foreign key (Id) References users(Id),	
+	)
+End
