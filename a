@@ -15,9 +15,9 @@ Go
 If Not Exists (Select * from sys.objects where name ='Geners')
 Begin
 	Create Table Geners(
-	Id int Identity(1,1) Not Null,
+	Genres_Id int Identity(1,1) Not Null,
 	Name varchar(50) Not Null,
-	Primary Key(Id)
+	Primary Key(Genres_Id)
 	)
 
 End
@@ -27,20 +27,20 @@ Go
 If Not Exists (Select * from sys.objects where name ='Movies')
 Begin
 	Create Table Movies(
-	Id int Identity(1,1) Not Null,
+	Movie_Id int Identity(1,1) Not Null,
 	Name varchar(50) Not Null,
 	Price Int Not Null,
-	Primary Key(Id)
+	Primary Key(Movie_Id)
 	)
 End
 
 if Not Exists (Select * from sys.objects where name = 'Geners_in_Movies')
 Begin
 	Create Table Geners_in_Movies(
-	geners_Id Int Not Null,
-	movie_Id int Not Null,
-	Foreign key (geners_Id) References Geners(Id),
-	Foreign Key (movie_Id) References Movies(Id)
+	Genres_Id Int Not Null,
+	Movie_Id int Not Null,
+	Foreign key (Genres_Id) References Geners(Genres_Id),
+	Foreign Key (Movie_Id) References Movies(Movie_Id)
 	)
 End
 
@@ -49,10 +49,10 @@ Go
 if Not Exists (Select * from sys.objects where name = 'users')
 Begin
 	Create Table users(
-	Id int Identity(1,1) Not Null,
+	User_Id int Identity(1,1) Not Null,
 	UserName varchar(50) Not Null,
 	UserPassword varchar(50) Not Null,
-	Primary Key (Id)
+	Primary Key (User_Id)
 	)
 End
 
@@ -64,7 +64,7 @@ Begin
 	Customer_id int Not Null,
 	movie_Name varchar(50) Not Null,
 	movie_Price Int Not Null,
-	Foreign key (Customer_id) References users(Id),	
+	Foreign key (Customer_id) References users(User_Id),	
 	)
 End
 
@@ -75,7 +75,7 @@ Begin
 	Customer_id int Not Null,
 	movie_Name varchar(50) Not Null,
 	movie_Price Int Not Null,
-	Foreign key (Customer_id) References users(Id),	
+	Foreign key (Customer_id) References users(User_Id),	
 	)
 End
 
@@ -84,9 +84,11 @@ Go
 if Not Exists (Select * from sys.objects where name = 'Search_Engine')
 Begin
 	Create Table Search_Engine(
-	Id Int Identity(1,1) Not Null,
+	Customer_Id Int Identity(1,1) Not Null,
 	Search varchar(50) Not Null,
-	Primary Key(Id),
-	Foreign key (Id) References users(Id),	
+	Primary Key(Customer_Id),
+	Foreign key (Customer_Id) References users(User_Id),	
 	)
 End
+
+
