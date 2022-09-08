@@ -1,101 +1,250 @@
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Calculator.aspx.cs" Inherits="WebApplication1.Calculator" %>
+--Creating database if it does not exist
+if Not Exists(Select * from sys.databases where name = 'Movie_Mangement')
+Begin
+	Create DataBase [Movie_Mangement]
+	
+End
 
-<!DOCTYPE html>
+Go
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head runat="server">
-        <title>Calculator</title>
-        <style>
-            *{
-                font-size:30px;
-            }
-            .main{
-                background-color:aliceblue;
-            }
-            .title{
-                padding:5px 150px;
-            }
-            .number1{
-               padding:10px 100px;
-            }
-            .number2{
-                padding:10px 100px;
-            }
-            .operation{
-                padding:10px 15px 10px 150px;
-            }
-            .result-button{
-                 padding:10px 15px 10px 150px;
-            }
-            .result{
-                 padding:10px 15px 10px 150px;
-            }
-            
-        </style>
-        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script type="text/javascript">
-                // Checking every event key and Enter only Number and point
-                function isNumberKey(e) {
-                    var count = 0;
-                    var x = e.which || e.keycode;
-                    if ((x >= 48 && x <= 57) || x==46 ) {
-                        return true;  
-                        }
+Use [Movie_Mangement]
 
-                        alert('Please Enter a Number');
-                        return false;
-                }
-                // Checking Number Validity 
-                function validNumber() {
-                  // Accessing Both input to check validity 
-                   var num1 = document.getElementById('Number1').value;
-                   var num2 = document.getElementById('Number2').value;
-                   //Calling isNan() to check Valid Number
-                   if (isNaN(num1)) {
-                      alert('X is not valid a number');
-                      return false;
-                   }
-                   if (isNaN(num2)) {
-                       alert('Y is not valid a number');
-                      return false;
-                    }
-                        return true;
-                }
+Go
 
-        </script>
-    </head>  
-    <body>  
-        <form id="form1" runat="server">
-            <div class="main">
-                <div class="title">
-                    <h1>Calculator</h1>
-                </div>
-                <div class="number1">
-                    <asp:Label ID="labeNumber1" runat="server" Text="X = "></asp:Label>
-                    <asp:TextBox ID="Number1" runat="server" ToolTip="Enter Number1" placeholder="Only Numbers are allowed" onkeypress="return isNumberKey(event)"></asp:TextBox>
-                </div>
-                <div class="number2">
-                    <asp:Label ID="labelNumber2" runat="server" Text="Y = "></asp:Label>
-                    <asp:TextBox ID="Number2" runat="server" ToolTip="Enter Number2" placeholder="Only Numbers are allowed" onkeypress="return isNumberKey(event)"></asp:TextBox>
-                </div>
-                <div class="operation">
-                    <asp:DropDownList ID="Operations" runat="server" AppendDataBoundItems="true">
-                        <asp:ListItem Value="+" Text="Add" />
-                        <asp:ListItem Value="-" Text="Subtract" />
-                        <asp:ListItem Value="*" Text="Multiply" />
-                        <asp:ListItem Value="/" Text="Division" />
-                    </asp:DropDownList>
-                </div>
-                <div class="result-button">
-                    <asp:Button ID="CalculateButton" runat="server" Text="Calculate" OnClick="Button1_Click" OnClientClick="return validNumber()" />
-                </div>
+--Create Table of Geners If Not Exist 
+If Not Exists (Select * from sys.objects where name ='Geners')
+Begin
+	Create Table Geners(
+	Genres_Id int Identity(1,1) Not Null,
+	Name varchar(50) Not Null,
+	Primary Key(Genres_Id)
+	)
 
-                <div class="result">
-                    <asp:Label ID="labelResult" runat="server" Text="<b>Result:</b>"></asp:Label>
-                    <asp:Label ID="resultCalculate" runat="server" Text="Label"></asp:Label>
-                </div>
-            </div>
-              
-        </form>   
-    </body>  
-</html>
+End
+
+Go
+--Create Table of Movies If Not Exist 
+If Not Exists (Select * from sys.objects where name ='Movies')
+Begin
+	Create Table Movies(
+	Movie_Id int Identity(1,1) Not Null,
+	Name varchar(50) Not Null,
+	Price Int Not Null,
+	Primary Key(Movie_Id)
+	)
+End
+
+if Not Exists (Select * from sys.objects where name = 'Geners_in_Movies')
+Begin
+	Create Table Geners_in_Movies(
+	Genres_Id Int Not Null,
+	Movie_Id int Not Null,
+	Foreign key (Genres_Id) References Geners(Genres_Id),
+	Foreign Key (Movie_Id) References Movies(Movie_Id)
+	)
+End
+
+Go
+
+
+--Create a Customer Information Table To Login
+if Not Exists (Select * from sys.objects where name = 'Users')
+Begin
+	Create Table Users(
+	Users_Id int Identity(1,1) Not Null,
+	Name varchar(50) Not Null,
+	Email varchar(100) Not Null,
+	UserName varchar(50) Not Null,
+	UserPassword varchar(50) Not Null,
+	role varchar(50) Not Null,
+	Primary Key (Users_Id)
+	)
+End
+
+Go
+--Create a cart to store User Information Wants to purchase
+if Not Exists (Select * from sys.objects where name = 'Cart')
+Begin
+	Create Table Cart(
+	Customer_Id int Not Null,
+	Movie_Id int Not Null,
+	Foreign key (Customer_Id) References Users(Users_Id),	
+	Foreign key (Movie_Id) References Movies(Movie_Id),	
+	)
+End
+
+Go
+--Create a cart to store User Information Wants to purchase
+if Not Exists (Select * from sys.objects where name = 'Purchase')
+Begin
+	Create Table Purchase(
+	Bill_Id Int Identity(1,1) Not Null,
+	Customer_Id int Not Null,
+	currentDate date Default GetDate()  Not Null,
+	Primary Key(Bill_Id),
+	Foreign key (Customer_Id) References Users(Users_Id),
+	
+	)
+End
+
+Go
+if Not Exists (Select * from sys.objects where name = 'Bill_Detail')
+Begin
+	Create Table Bill_Detail(
+	Bill_Id Int Not Null,
+	Movie_Id Int Not Null,
+	Price Int Not Null,
+	Foreign key (Bill_Id) References Purchase(Bill_Id),
+	Foreign Key (Movie_Id) References Movies(Movie_Id)
+	)
+End
+
+Go
+--Create a cart to store User Information Wants to purchase
+if Not Exists (Select * from sys.objects where name = 'Search_Engine')
+Begin
+	Create Table Search_Engine(
+	Customer_Id Int Identity(1,1) Not Null,
+	Genres_Id int Not Null,
+	Foreign key (Customer_Id) References Users(Users_Id)
+	
+	)
+End
+
+Go
+
+--Create Procedures To Get Users Detail
+IF EXISTS (
+        SELECT type_desc, type
+        FROM sys.procedures WITH(NOLOCK)
+        WHERE NAME = 'getUsersDetails'
+            AND type = 'P'
+      )
+     DROP PROCEDURE dbo.getUsersDetails
+GO
+--Adding Customer Data To Users 
+CREATE PROC dbo.getUsersDetails @role varchar(50)
+AS
+BEGIN
+--To Enter Data Only If It Does Not Exist 
+	
+		select * From users where role = @role;
+END
+
+Go
+
+--Create Procedures To Add Users Detail
+IF EXISTS (
+        SELECT type_desc, type
+        FROM sys.procedures WITH(NOLOCK)
+        WHERE NAME = 'addUsersDetails'
+            AND type = 'P'
+      )
+     DROP PROCEDURE dbo.addUsersDetails
+GO
+--Adding Customer Data To Users 
+CREATE PROC dbo.addUsersDetails @Name varchar(50),@Email varchar(50),@UserName varchar(50),@UserPassword varchar(50),@role varchar(50)
+AS
+BEGIN
+--To Enter Data Only If It Does Not Exist 
+		if Not Exists (Select Email From Users where Email = @Email)
+			Begin
+				Insert into Users values(@Name,@Email,@UserName,@UserPassword,@role)
+			End
+END
+Go
+--Go
+--IF EXISTS (
+--        SELECT type_desc, type
+--        FROM sys.procedures WITH(NOLOCK)
+--        WHERE NAME = 'addMovies'
+--            AND type = 'P'
+--      )
+--     DROP PROCEDURE dbo.addMovies
+--GO
+----Adding Customer Data To Users 
+--CREATE PROC dbo.addMovies @Name varchar(100), @Price varchar(100)
+--AS
+--BEGIN
+----To Enter Data Only If It Does Not Exist 
+	
+--		Insert into Movies(Name,Price) Values(@Name,@Price)
+--		select max(Movie_Id) From Movies where Name =  @Name And Price = @Price
+--END
+
+--Go  
+--IF EXISTS (
+--        SELECT type_desc, type
+--        FROM sys.procedures WITH(NOLOCK)
+--        WHERE NAME = 'GetGenresId'
+--            AND type = 'P'
+--      )
+--     DROP PROCEDURE dbo.GetGenresId
+--GO
+----Adding Customer Data To Users 
+--CREATE PROC dbo.GetGenresId @Name Int
+--AS
+--BEGIN
+----To Enter Data Only If It Does Not Exist 
+	
+--		Select Genres_Id from Geners Where Name = @Name
+--END
+
+--Go 
+
+--Go  
+--IF EXISTS (
+--        SELECT type_desc, type
+--        FROM sys.procedures WITH(NOLOCK)
+--        WHERE NAME = 'addGenres'
+--            AND type = 'P'
+--      )
+--     DROP PROCEDURE dbo.addGenres
+--GO
+----Adding Customer Data To Users 
+--CREATE PROC dbo.addGenres @genres_Id Int, @movie_Id Int
+--AS
+--BEGIN
+----To Enter Data Only If It Does Not Exist 
+	
+--		Insert into Geners_in_Movies(Genres_Id,Movie_Id) Values(@genres_Id,@movie_Id)
+--END
+
+--Go 
+
+--IF EXISTS (
+--        SELECT type_desc, type
+--        FROM sys.procedures WITH(NOLOCK)
+--        WHERE NAME = 'getMovies'
+--            AND type = 'P'
+--      )
+--     DROP PROCEDURE dbo.getMovies
+--GO
+----Adding Customer Data To Users 
+--CREATE PROC dbo.getMovies 
+--AS
+--BEGIN
+----To Enter Data Only If It Does Not Exist 
+	
+--		Select Movies.Name As Movie_Name, Movies.Price, Geners.Name As Geners_Name from Movies 
+--		Inner join Geners_in_Movies on Geners_in_Movies.Movie_Id = Movies.Movie_Id Inner Join Geners On Geners.Genres_Id = Geners_in_Movies.Genres_Id
+--END
+
+--Go 
+
+--Insert into Movies Values('Avengers',100)
+
+--Insert into Geners Values
+--('Thriller'),
+--('Comedy'),
+--()
+
+--drop table Cart
+--drop table Bill_Detail
+--drop table Purchase
+--drop table Search_Engine
+--drop table users
+--delete from users
+--insert into users Values('Zaheer','zaheerabbass914@gmail.com','Zaheer914','zaheer','Admin')
+--insert into users Values('Sohaib','sohaib914@gmail.com','sohaib914','sohaib','Customer')
+select * from [dbo].[Users]
