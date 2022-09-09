@@ -153,26 +153,42 @@ BEGIN
 			End
 END
 Go
---Go
---IF EXISTS (
---        SELECT type_desc, type
---        FROM sys.procedures WITH(NOLOCK)
---        WHERE NAME = 'addMovies'
---            AND type = 'P'
---      )
---     DROP PROCEDURE dbo.addMovies
---GO
-----Adding Customer Data To Users 
---CREATE PROC dbo.addMovies @Name varchar(100), @Price varchar(100)
---AS
---BEGIN
-----To Enter Data Only If It Does Not Exist 
-	
---		Insert into Movies(Name,Price) Values(@Name,@Price)
---		select max(Movie_Id) From Movies where Name =  @Name And Price = @Price
---END
 
---Go  
+IF EXISTS (
+        SELECT type_desc, type
+        FROM sys.procedures WITH(NOLOCK)
+        WHERE NAME = 'getGenres'
+            AND type = 'P'
+      )
+     DROP PROCEDURE dbo.getGenres
+GO
+--Adding Customer Data To Users 
+CREATE PROC dbo.getGenres 
+As
+BEGIN
+	Select * from Geners
+END
+Go
+Go
+IF EXISTS (
+        SELECT type_desc, type
+        FROM sys.procedures WITH(NOLOCK)
+        WHERE NAME = 'addMovies'
+            AND type = 'P'
+      )
+     DROP PROCEDURE dbo.addMovies
+GO
+--Adding Customer Data To Users 
+CREATE PROC dbo.addMovies @Name varchar(100), @Price varchar(100)
+AS
+BEGIN
+--To Enter Data Only If It Does Not Exist 
+	
+		Insert into Movies(Name,Price) Values(@Name,@Price)
+		select SCOPE_IDENTITY() As Movie_Id
+END
+
+Go  
 --IF EXISTS (
 --        SELECT type_desc, type
 --        FROM sys.procedures WITH(NOLOCK)
@@ -193,24 +209,24 @@ Go
 --Go 
 
 --Go  
---IF EXISTS (
---        SELECT type_desc, type
---        FROM sys.procedures WITH(NOLOCK)
---        WHERE NAME = 'addGenres'
---            AND type = 'P'
---      )
---     DROP PROCEDURE dbo.addGenres
---GO
-----Adding Customer Data To Users 
---CREATE PROC dbo.addGenres @genres_Id Int, @movie_Id Int
---AS
---BEGIN
-----To Enter Data Only If It Does Not Exist 
+IF EXISTS (
+        SELECT type_desc, type
+        FROM sys.procedures WITH(NOLOCK)
+        WHERE NAME = 'addGenresInMovies'
+            AND type = 'P'
+      )
+     DROP PROCEDURE dbo.addGenresInMovies
+GO
+--Adding Customer Data To Users 
+CREATE PROC dbo.addGenresInMovies @genres_Id Int, @movie_Id Int
+AS
+BEGIN
+--To Enter Data Only If It Does Not Exist 
 	
---		Insert into Geners_in_Movies(Genres_Id,Movie_Id) Values(@genres_Id,@movie_Id)
---END
+		Insert into Geners_in_Movies(Genres_Id,Movie_Id) Values(@genres_Id,@movie_Id)
+END
 
---Go 
+Go 
 
 --IF EXISTS (
 --        SELECT type_desc, type
@@ -226,8 +242,8 @@ Go
 --BEGIN
 ----To Enter Data Only If It Does Not Exist 
 	
---		Select Movies.Name As Movie_Name, Movies.Price, Geners.Name As Geners_Name from Movies 
---		Inner join Geners_in_Movies on Geners_in_Movies.Movie_Id = Movies.Movie_Id Inner Join Geners On Geners.Genres_Id = Geners_in_Movies.Genres_Id
+		Select Movies.Name As Movie_Name, Movies.Price, Geners.Name As Geners_Name from Movies 
+		Inner join Geners_in_Movies on Geners_in_Movies.Movie_Id = Movies.Movie_Id Inner Join Geners On Geners.Genres_Id = Geners_in_Movies.Genres_Id
 --END
 
 --Go 
@@ -237,7 +253,10 @@ Go
 --Insert into Geners Values
 --('Thriller'),
 --('Comedy'),
---()
+--('Romantic'),
+--('Horror'),
+--('Action'),
+--('Adventure')
 
 --drop table Cart
 --drop table Bill_Detail
@@ -247,4 +266,8 @@ Go
 --delete from users
 --insert into users Values('Zaheer','zaheerabbass914@gmail.com','Zaheer914','zaheer','Admin')
 --insert into users Values('Sohaib','sohaib914@gmail.com','sohaib914','sohaib','Customer')
+
 select * from [dbo].[Users]
+
+select * from Geners
+
